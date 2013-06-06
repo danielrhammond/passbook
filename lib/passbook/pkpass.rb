@@ -65,7 +65,8 @@ module Passbook
     def get_p12_cert_and_key
       key_hash = {}
       if Passbook.p12_key
-        key_hash[:key] = OpenSSL::PKey::RSA.new File.read(Passbook.p12_key), Passbook.p12_password
+        p12 = OpenSSL::PKCS12.new File.read(Passbook.p12_key), Passbook.p12_password
+        key_hash[:key] = p12.key
         key_hash[:cert] = OpenSSL::X509::Certificate.new File.read(Passbook.p12_certificate)
       else
         p12 = OpenSSL::PKCS12.new File.read(Passbook.p12_cert), Passbook.p12_password
